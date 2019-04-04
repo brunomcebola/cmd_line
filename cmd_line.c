@@ -8,21 +8,23 @@
 #include <dirent.h>
 #include <limits.h>
 
-void SeparaInput(char str[], char instruct[], char directory[]){
+void SeparaInput(char str[100], char instruction[100], char directory[100]){
     char *token = strtok(str, " ");
-    strcpy(instruct, token);
+    strcpy(instruction,token);
     token = strtok(NULL, " ");
-    strcpy(directory,token);
+    if(token != NULL){
+      strncpy(directory,token,strlen(token)-1);
+    }
     return;
 }
 
 int main()
 {
 
-  char cwd[PATH_MAX];
-  char str[]="\0";
-  char instruct[]="\0";
-  char directory[]="\0";
+  char cwd[PATH_MAX]="\0";
+  char str[200]="\0";
+  char instruction[20]="\0";
+  char directory[180]="\0";
   struct dirent *de;
   DIR *dr;
 
@@ -31,10 +33,9 @@ int main()
         printf("%s\n", cwd);
         printf("$ ");
         fgets(str, 100, stdin);
-        SeparaInput(str, instruct, directory);
-          printf("%s", instruct);
-            printf("%s\n", directory);
-        if(strcmp(instruct,"ls")==0){
+        SeparaInput(str, instruction, directory);
+
+        if(strcmp(instruction,"ls")==0){
           dr = opendir(directory);
 
           if (dr == NULL)  // opendir returns NULL if couldn't open directory
