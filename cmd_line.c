@@ -8,32 +8,49 @@
 #include <dirent.h>
 #include <limits.h>
 
+void SeparaInput(char str[], char instruct[], char directory[]){
+    char *token = strtok(str, " ");
+    strcpy(instruct, token);
+    token = strtok(NULL, " ");
+    strcpy(directory,token);
+    return;
+}
+
 int main()
 {
 
   char cwd[PATH_MAX];
-  char dir[]="\0";
-  struct dirent *de;  // Pointer for directory entry
-  // opendir() returns a pointer of DIR type.
+  char str[]="\0";
+  char instruct[]="\0";
+  char directory[]="\0";
+  struct dirent *de;
   DIR *dr;
 
     while(1){
       if (getcwd(cwd, sizeof(cwd)) != NULL) {
         printf("%s\n", cwd);
         printf("$ ");
-        gets(dir);
-        dr = opendir(dir);
+        fgets(str, 100, stdin);
+        SeparaInput(str, instruct, directory);
+          printf("%s", instruct);
+            printf("%s\n", directory);
+        if(strcmp(instruct,"ls")==0){
+          dr = opendir(directory);
 
-        if (dr == NULL)  // opendir returns NULL if couldn't open directory
-        {
-            printf("Could not find directory\n");
+          if (dr == NULL)  // opendir returns NULL if couldn't open directory
+          {
+              printf("Could not find directory\n");
+          }
+
+          while ((de = readdir(dr)) != NULL){
+            if(de->d_name[0]!='.'){printf("%s\n", de->d_name);}
+          }
+
+
+          closedir(dr);
         }
-
-        while ((de = readdir(dr)) != NULL)
-                printf("%s\n", de->d_name);
-
-        closedir(dr);
       }
+      printf("\n");
     }
 
     return 0;
