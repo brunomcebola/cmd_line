@@ -8,7 +8,7 @@
 #include <dirent.h>
 #include <limits.h>
 
-void SeparaInput(char str[200], char instruction_line[10][200]){
+void SeparaInput(char str[200], char instruction_line[100][200]){
   /*apaga o \n do final*/
   char *newline = strchr( str, '\n' );
   if ( newline ) *newline = 0;
@@ -36,7 +36,8 @@ int main()
 
   char cwd[PATH_MAX]="\0";
   char str[200]="\0";
-  char instruction_line[10][200]={"\0"};
+  char instruction_line[100][200]={"\0"};
+  char directory[100]="\0";
   struct dirent *de;
   DIR *dr;
 
@@ -46,8 +47,7 @@ int main()
         printf("$ ");
         fgets(str, 100, stdin);
         SeparaInput(str, instruction_line);
-        printf("%s\n",instruction_line[0]);
-        printf("%s\n",instruction_line[1]);
+
         if(strcmp(instruction_line[0],"ls")==0){
 
           if(strcmp(instruction_line[1],"-a")==0){
@@ -94,32 +94,50 @@ int main()
         else if(strcmp(instruction_line[0],"goto")==0){
 
           if(strcmp(instruction_line[1],"-n")==0){
-
             if(strcmp(instruction_line[2],".")==0||strcmp(instruction_line[2],"..")==0){
               printf("Could not find directory\n");
             }
-
             else{
+              strcpy(directory,"\0");
               int flag=0;
               dr = opendir(cwd);
               if (dr == NULL)  // opendir returns NULL if couldn't open directory
               {
                   printf("Could not find directory\n");
               }
+
+              /*Cria o caminho a seguir para o diretorio*/
+              for(int a=2;a<100;a++){
+                strcat(directory, instruction_line[a]);
+                if(strcmp(instruction_line[a],"")!=0){
+                  strcat(directory, " ");
+                }
+              }
+              char * ptr = strrchr(directory,' ');
+              *ptr='\0';
+
+              /*verifica a existencia do diretorio dentro do diretorio atual*/
               while ((de = readdir(dr)) != NULL){
-                if(strcmp(instruction_line[2],de->d_name)==0){
+                if(strcmp(directory,de->d_name)==0){
                   strcat(cwd,"\\");
-                  strcat(cwd,instruction_line[2]);
+                  strcat(cwd,directory);
                   chdir(cwd);
                   flag=1;
                 }
               }
               if(flag==0) printf("Could not find directory\n");
             }
-
           }
-          else if(strcmp(instruction_line[1],"-d")==0){
 
+          else if(strcmp(instruction_line[1],"-d")==0){
+            strcpy(cwd,"C:\\");
+            for(int a=2;a<100;a++){
+              strcat(cwd, instruction_line[a]);
+              if(strcmp(instruction_line[a],"")!=0){
+                strcat(cwd, " ");
+              }
+            }
+            if(chdir(cwd)!=0) printf("Could not find directory\n");
           }
           else{
             printf("Command not available\n");
@@ -127,7 +145,7 @@ int main()
         }
 
         else{
-          printf("Command not available1\n");
+          printf("Command not available\n");
         }
 
 
