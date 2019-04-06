@@ -43,6 +43,7 @@ int main()
 
     while(1){
       if (getcwd(cwd, sizeof(cwd)) != NULL) {
+
         printf("%s\n", cwd);
         printf("$ ");
         fgets(str, 100, stdin);
@@ -121,7 +122,7 @@ int main()
                 if(strcmp(directory,de->d_name)==0){
                   strcat(cwd,"\\");
                   strcat(cwd,directory);
-                  chdir(cwd);
+                  if(chdir(cwd)!=0) printf("Could not find directory\n");
                   flag=1;
                 }
               }
@@ -144,10 +145,23 @@ int main()
           }
         }
 
+        else if(strcmp(instruction_line[0],"print")==0){
+          FILE *fptr;
+          int c;
+          fptr = fopen(instruction_line[1], "r");
+          if(fptr!=NULL){
+            printf("\n");
+            while ((c = getc(fptr)) != EOF) printf("%c", c);
+          }
+          else{
+            printf("Unable to open file\n");
+          }
+          fclose(fptr);
+        }
+
         else{
           printf("Command not available\n");
         }
-
 
       }
 
