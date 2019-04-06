@@ -8,6 +8,8 @@
 #include <dirent.h>
 #include <limits.h>
 
+#define PATH_MAX 4096
+
 void SeparaInput(char str[200], char instruction_line[100][200]){
   /*apaga o \n do final*/
   char *newline = strchr( str, '\n' );
@@ -140,6 +142,7 @@ int main()
             }
             if(chdir(cwd)!=0) printf("Could not find directory\n");
           }
+
           else{
             printf("Command not available\n");
           }
@@ -167,6 +170,27 @@ int main()
             perror("Error");
           }
         }
+
+        else if(strcmp(instruction_line[0],"new")==0){
+
+          if(strcmp(instruction_line[1],"-f")==0){
+            FILE *fptr;
+            fptr = fopen(instruction_line[2], "w");
+            if (fptr == NULL) {
+              perror("Error");
+            }
+            else{
+              printf("File %s created successfuly\n", instruction_line[2]);
+            }
+            fclose(fptr);
+          }
+
+          else{
+            printf("Command not available\n");
+          }
+        }
+
+        else if(strcmp(instruction_line[0],"exit")==0){exit(0);}
 
         else{
           printf("Command not available\n");
