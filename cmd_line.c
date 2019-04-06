@@ -154,9 +154,18 @@ int main()
             while ((c = getc(fptr)) != EOF) printf("%c", c);
           }
           else{
-            printf("Unable to open file\n");
+            perror("Error");
           }
           fclose(fptr);
+        }
+
+        else if(strcmp(instruction_line[0],"remove")==0){
+          if(remove(instruction_line[1])==0){
+            printf("File successfuly deleted\n");
+          }
+          else{
+            perror("Error");
+          }
         }
 
         else{
