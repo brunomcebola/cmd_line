@@ -9,7 +9,7 @@
 #include <limits.h>
 #include <windows.h>
 
-void SeparaInput(char str[200], char instruction_line[100][200]){
+void SeparaInput(char str[400], char instruction_line[100][400]){
   /*apaga o \n do final*/
   char *newline = strchr( str, '\n' );
   if ( newline ) *newline = 0;
@@ -36,15 +36,15 @@ int main()
 {
 
   char cwd[PATH_MAX]="\0";
-  char str[200]="\0";
-  char instruction_line[100][200]={"\0"};
-  char directory[100]="\0";
+  char str[400]="\0";
+  char instruction_line[100][400]={"\0"};
+  char directory[200]="\0";
+  char program[200]="\0";
   struct dirent *de;
   DIR *dr;
 
     while(1){
       if (getcwd(cwd, sizeof(cwd)) != NULL) {
-
         printf("%s\n", cwd);
         printf("$ ");
         fgets(str, 100, stdin);
@@ -194,10 +194,19 @@ int main()
             system("notepad.exe");
           }
           else if(strcmp(instruction_line[1],"-c")==0){
-            /*mudar o nome de cwd para outra cena*/
-            strcat(cwd,"\\");
-            strcat(cwd,instruction_line[2]);
-            system(cwd);
+            if(strcmp(instruction_line[2],"")!=0){
+              strcpy(program,"\0");
+              strcpy(program,"\"");
+              strcat(program,cwd);
+              strcat(program,"\\");
+              strcat(program,instruction_line[2]);
+              strcat(program,"\"");
+              system(program);
+            }
+            else{printf("No executable file defined\n");}
+          }
+          else{
+            printf("Command not available\n");
           }
         }
 
