@@ -7,8 +7,7 @@
 #include <stdio.h>    //funçoes de ficheiros
 #include <dirent.h>
 #include <limits.h>
-
-#define PATH_MAX 4096
+#include <windows.h>
 
 void SeparaInput(char str[200], char instruction_line[100][200]){
   /*apaga o \n do final*/
@@ -190,7 +189,21 @@ int main()
           }
         }
 
-        else if(strcmp(instruction_line[0],"exit")==0){exit(0);}
+        else if(strcmp(instruction_line[0],"exec")==0){
+          if(strcmp(instruction_line[1],"notepad")==0){
+            system("notepad.exe");
+          }
+          else if(strcmp(instruction_line[1],"-c")==0){
+            /*mudar o nome de cwd para outra cena*/
+            strcat(cwd,"\\");
+            strcat(cwd,instruction_line[2]);
+            system(cwd);
+          }
+        }
+
+        else if(strcmp(instruction_line[0],"exit")==0){
+          exit(0);
+        }
 
         else{
           printf("Command not available\n");
