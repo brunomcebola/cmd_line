@@ -44,6 +44,27 @@ int main()
   DIR *dr;
 
     while(1){
+    /* Some list of combinations
+
+    0 = Black
+    1 = Blue
+    2 = Green
+    3 = Aqua
+    4 = Red
+    5 = Purple
+    6 = Yellow
+    7 = White
+    8 = Gray
+    9 = Light Blue
+
+    A = Light Green
+    B = Light Aqua
+    C = Light Red
+    D = Light Purple
+    E = Light Yellow
+    F = Bright White
+    */
+      system("COLOR F1");
       if (getcwd(cwd, sizeof(cwd)) != NULL) {
         printf("%s\n", cwd);
         printf("$ ");
@@ -95,8 +116,8 @@ int main()
 
         else if(strcmp(instruction_line[0],"goto")==0){
 
-          if(strcmp(instruction_line[1],"-n")==0){
-            if(strcmp(instruction_line[2],".")==0||strcmp(instruction_line[2],"..")==0){
+          if(instruction_line[1][0]!='-'){
+            if(strcmp(instruction_line[1],".")==0||strcmp(instruction_line[1],"..")==0){
               printf("Could not find directory\n");
             }
             else{
@@ -109,7 +130,7 @@ int main()
               }
 
               /*Cria o caminho a seguir para o diretorio*/
-              for(int a=2;a<100;a++){
+              for(int a=1;a<100;a++){
                 strcat(directory, instruction_line[a]);
                 if(strcmp(instruction_line[a],"")!=0){
                   strcat(directory, " ");
@@ -154,6 +175,7 @@ int main()
           if(fptr!=NULL){
             printf("\n");
             while ((c = getc(fptr)) != EOF) printf("%c", c);
+            printf("\n");
           }
           else{
             perror("Error");
@@ -201,12 +223,50 @@ int main()
               strcat(program,"\\");
               strcat(program,instruction_line[2]);
               strcat(program,"\"");
+              printf("Running: %s\n\n",instruction_line[2]);
               system(program);
+              system("cls");
+              printf("Back to the command line!\n");
             }
             else{printf("No executable file defined\n");}
           }
           else{
             printf("Command not available\n");
+          }
+        }
+
+        else if(strcmp(instruction_line[0],"settings")==0){
+          FILE *fptr;
+          if(strcmp(instruction_line[1],"-r")==0){
+            char c;
+            fptr = fopen("settings.txt", "r");
+            if(fptr!=NULL){
+              printf("\n");
+              while ((c = getc(fptr)) != EOF) printf("%c", c);
+            }
+            else{
+              perror("Error");
+            }
+            fclose(fptr);
+          }
+
+          else if(strcmp(instruction_line[1],"-w")==0){
+             char text[101]="\0";
+             fptr = fopen("settings.txt","a");
+
+             if(fptr != NULL){
+               do{
+                 strcpy(text,"\0");
+                 fgets(text,100,stdin);
+                 if(strcmp(text,"done\n")!=0){
+                   fprintf(fptr,"%*s",strlen(text)-1,text);
+                 }
+               }while(strcmp(text,"done\n")!=0);
+             }
+             else{
+               perror("Error");
+             }
+             fclose(fptr);
           }
         }
 
