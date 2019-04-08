@@ -3,9 +3,12 @@
 
 int main()
 {
-   textcolor(RED);
-   cprintf("C programming");
+  int a=0;
+  int *ptr=&a;
+  int **pptr=&ptr;
 
-   getch();
-   return 0;
+
+  
+
+  return 0;
 }
