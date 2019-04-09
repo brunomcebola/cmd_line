@@ -9,6 +9,7 @@
 #include <limits.h>
 #include <windows.h>
 
+
 void SeparaInput(char str[400], char instruction_line[100][400]){
   /*apaga o \n do final*/
   char *newline = strchr( str, '\n' );
@@ -32,9 +33,13 @@ void SeparaInput(char str[400], char instruction_line[100][400]){
   return;
 }
 
+
+
+
+
+
 int main()
 {
-
     char cwd[PATH_MAX]="\0";
     char str[400]="\0";
     char instruction_line[100][400]={"\0"};
@@ -233,7 +238,13 @@ int main()
 
           if(strcmp(instruction_line[1],"-f")==0){
             FILE *fptr;
-            fptr = fopen(instruction_line[2], "w");
+            char file[100];
+            strcpy(file,"\0");
+            for(int i=2;i<100;i++){
+              strcat(file,instruction_line[i]);
+              strcat(file," ");
+            }
+            fptr = fopen(file, "w");
             if (fptr == NULL) {
               perror("Error");
             }
@@ -271,6 +282,22 @@ int main()
             printf("Command not available\n");
           }
         }
+
+        else if(strcmp(instruction_line[0],"net")==0){
+          if(strcmp(instruction_line[1],"")==0){
+            system("\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\"");
+          }
+          else if(strcmp(instruction_line[1],"close")==0){
+            
+          }
+          else{
+            char page[]="explorer https://";
+            strcat(page,instruction_line[1]);
+            system(page);
+          }
+        }
+
+
 
         else if(strcmp(instruction_line[0],"settings")==0){
           FILE *fptr;
