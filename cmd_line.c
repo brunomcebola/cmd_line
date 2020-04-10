@@ -9,7 +9,6 @@
 #include <limits.h>
 #include <windows.h>
 
-
 void SeparaInput(char str[400], char instruction_line[100][400]){
   /*apaga o \n do final*/
   char *newline = strchr( str, '\n' );
@@ -33,20 +32,16 @@ void SeparaInput(char str[400], char instruction_line[100][400]){
   return;
 }
 
-
-
-
-
-
 int main()
 {
-    char cwd[PATH_MAX]="\0";
+    char cwd[400]="\0";
     char str[400]="\0";
     char instruction_line[100][400]={"\0"};
     char directory[200]="\0";
     char program[200]="\0";
     struct dirent *de;
     DIR *dr;
+
 
     while(1){
 
@@ -288,7 +283,7 @@ int main()
             system("\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\"");
           }
           else if(strcmp(instruction_line[1],"close")==0){
-            
+
           }
           else{
             char page[]="explorer https://";
@@ -297,13 +292,11 @@ int main()
           }
         }
 
-
-
         else if(strcmp(instruction_line[0],"settings")==0){
           FILE *fptr;
           if(strcmp(instruction_line[1],"-r")==0){
             char c;
-            fptr = fopen("settings.txt", "r");
+            fptr = fopen("C:\\Users\\Bruno Cebola\\github\\cmd_line\\settings.txt", "r");
             if(fptr!=NULL){
               printf("\n");
               while ((c = getc(fptr)) != EOF) printf("%c", c);
@@ -316,14 +309,14 @@ int main()
 
           else if(strcmp(instruction_line[1],"-w")==0){
              char text[101]="\0";
-             fptr = fopen("settings.txt","a");
+             fptr = fopen("C:\\Users\\Bruno Cebola\\github\\cmd_line\\settings.txt","a");
 
              if(fptr != NULL){
                do{
                  strcpy(text,"\0");
                  fgets(text,100,stdin);
                  if(strcmp(text,"done\n")!=0){
-                   fprintf(fptr,"%*s",strlen(text)-1,text);
+                   fprintf(fptr,"%*s",(int) strlen(text)-1,text);
                  }
                }while(strcmp(text,"done\n")!=0);
              }
@@ -334,7 +327,7 @@ int main()
           }
 
           else if(strcmp(instruction_line[1],"-d")==0){
-            fptr = fopen("settings.txt","w");
+            fptr = fopen("C:\\Users\\Bruno Cebola\\github\\cmd_line\\settings.txt","w");
             fclose(fptr);
             system("COLOR 07");
             printf("All definitions set as default\n" );
@@ -376,7 +369,7 @@ int main()
         }
 
         else{
-          printf("Command not available\n");
+          printf("Command not available\n Type \"help\" to see the command list");
         }
 
       }

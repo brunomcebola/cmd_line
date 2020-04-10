@@ -1,1 +1,2 @@
 COLOR 02
+COLOR 6E
